@@ -65,9 +65,9 @@ class PasswordInputView: UIView {
                 textfield.text = string
             }
             var stringArray = string.map {String($0)}
-            if stringArray.count < 4
+            if stringArray.count < maxCount
             {
-                stringArray = stringArray + Array(repeating: "", count: 4 - stringArray.count )
+                stringArray = stringArray + Array(repeating: "", count: maxCount - stringArray.count )
             }
             let res = zip(stringArray, chars).map {$0.0 == $0.1}
             if let index = res.firstIndex(of: false){
