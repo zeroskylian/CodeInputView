@@ -13,6 +13,7 @@
 		635B8853260832A500B928F2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 635B8851260832A500B928F2 /* Main.storyboard */; };
 		635B8855260832A500B928F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 635B8854260832A500B928F2 /* Assets.xcassets */; };
 		635B8858260832A500B928F2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 635B8856260832A500B928F2 /* LaunchScreen.storyboard */; };
+		635B8861260832AB00B928F2 /* PasswordInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635B8860260832AB00B928F2 /* PasswordInputView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		635B8854260832A500B928F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		635B8857260832A500B928F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		635B8859260832A500B928F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		635B8860260832AB00B928F2 /* PasswordInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordInputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				635B884B260832A500B928F2 /* AppDelegate.swift */,
 				635B884D260832A500B928F2 /* SceneDelegate.swift */,
 				635B884F260832A500B928F2 /* ViewController.swift */,
+				635B8860260832AB00B928F2 /* PasswordInputView.swift */,
 				635B8851260832A500B928F2 /* Main.storyboard */,
 				635B8854260832A500B928F2 /* Assets.xcassets */,
 				635B8856260832A500B928F2 /* LaunchScreen.storyboard */,
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				635B8861260832AB00B928F2 /* PasswordInputView.swift in Sources */,
 				635B8850260832A500B928F2 /* ViewController.swift in Sources */,
 				635B884C260832A500B928F2 /* AppDelegate.swift in Sources */,
 				635B884E260832A500B928F2 /* SceneDelegate.swift in Sources */,
