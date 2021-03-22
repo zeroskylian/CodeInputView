@@ -9,13 +9,11 @@ import UIKit
 
 class PasswordInputView: UIView {
     
-    private let inputv:UITextField = UITextField()
+    private var chars: [String] = []
     
-    private var chars:[String]
+    private let maxCount: Int
     
-    private let maxCount:Int
-    
-    private var collectionView:UICollectionView
+    private var collectionView: UICollectionView
     
     override var backgroundColor: UIColor? {
         willSet{
@@ -24,8 +22,8 @@ class PasswordInputView: UIView {
     }
     
     required init(origin:CGPoint,itemSize: CGSize,itemCount:Int, insets:UIEdgeInsets = UIEdgeInsets.zero, spacing:CGFloat) {
+        
         maxCount = itemCount
-        chars = Array(repeating: "", count: itemCount)
         let frame = CGRect(x: origin.x, y: origin.y, width: itemSize.width * CGFloat(itemCount) + insets.left + insets.right + spacing * CGFloat(itemCount - 1), height: itemSize.height + insets.top + insets.bottom)
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = itemSize
@@ -33,56 +31,79 @@ class PasswordInputView: UIView {
         layout.minimumInteritemSpacing = spacing
         collectionView = UICollectionView(frame: CGRect(origin: CGPoint.zero, size: frame.size), collectionViewLayout: layout)
         collectionView.register(PasswordInputItem.self, forCellWithReuseIdentifier: "PasswordInputItem")
-        collectionView.backgroundColor = UIColor.white
+        collectionView.backgroundColor = .white
+        collectionView.isUserInteractionEnabled = false
         super.init(frame: frame)
         
         collectionView.delegate = self
         collectionView.dataSource = self
         addSubview(collectionView)
         
-        inputv.keyboardType = .decimalPad
-        inputv.addTarget(self, action: #selector(textfieldTextDidChange(textfield:)), for: .editingChanged)
-        addSubview(inputv)
-        
         backgroundColor = UIColor.lightGray
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
-        addGestureRecognizer(tap)
-    }
-    
-    @objc private func tapAction() {
-        inputv.becomeFirstResponder()
-    }
-    
-    @objc private func textfieldTextDidChange(textfield:UITextField){
-        if var string = textfield.text {
-            if string.count > maxCount {
-                string = String(string.prefix(maxCount))
-                textfield.text = string
-            }
-            var stringArray = string.map {String($0)}
-            if stringArray.count < maxCount
-            {
-                stringArray = stringArray + Array(repeating: "", count: maxCount - stringArray.count )
-            }
-            let res = zip(stringArray, chars).map {$0.0 == $0.1}
-            if let index = res.firstIndex(of: false){
-                chars = stringArray
-                UIView.setAnimationsEnabled(false)
-                collectionView.performBatchUpdates({
-                    collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
-                }) { (res) in
-                    UIView.setAnimationsEnabled(true)
-                }
-            }
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        becomeFirstResponder()
+    }
+    
+    
 }
 
+extension PasswordInputView: UIKeyInput {
+    
+    enum InputType {
+        case add
+        case delete
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    var hasText: Bool {
+        return chars.count != 0
+    }
+    
+    func insertText(_ text: String) {
+        if chars.count < maxCount {
+            chars.append(text)
+            reloadView(type: .add)
+        }
+    }
+    
+    func deleteBackward() {
+        _ = chars.popLast()
+        print(chars)
+        reloadView(type: .delete)
+    }
+    
+    private func getValue(index: Int) -> String {
+        if index <= chars.count - 1 {
+            return chars[index]
+        }
+        return ""
+    }
+    
+    private func reloadView(type: InputType) {
+        UIView.setAnimationsEnabled(false)
+        collectionView.performBatchUpdates({
+            switch type{
+            case .add:
+                collectionView.reloadItems(at: [IndexPath(item: max(chars.count - 1, 0), section: 0)])
+            case .delete:
+                collectionView.reloadItems(at: [IndexPath(item: chars.count, section: 0)])
+            }
+        }) { (res) in
+            UIView.setAnimationsEnabled(true)
+        }
+    }
+    
+    
+}
 
 extension PasswordInputView :UICollectionViewDelegate,UICollectionViewDataSource {
     
@@ -100,23 +121,22 @@ extension PasswordInputView :UICollectionViewDelegate,UICollectionViewDataSource
         guard let cell = baseCell as? PasswordInputItem else {
             fatalError("Failed to dequeue a cell with identifier")
         }
-        cell.text = chars[indexPath.row]
+        cell.text = getValue(index: indexPath.row)
         return cell
     }
 }
 
 class PasswordInputItem: UICollectionViewCell {
     
-    let textLabel:UILabel = UILabel()
+    let textLabel: UILabel = UILabel()
     
-    let lineLayer:CALayer = CALayer()
+    let lineLayer: CALayer = CALayer()
     
     var text:String = "" {
         willSet{
-            if newValue.count == 0{
+            if newValue.count == 0 {
                 clearText()
-            }else
-            {
+            }else {
                 textLabel.text = newValue
                 lineLayer.isHidden = false
             }
