@@ -7,6 +7,11 @@
 //
 import UIKit
 
+protocol PasswordInputViewDelegate {
+    func inputView(_ view: PasswordInputView, canAdd input: String) -> Bool
+}
+
+
 class PasswordInputView: UIView {
     
     private var chars: [String] = []
@@ -14,6 +19,8 @@ class PasswordInputView: UIView {
     private let maxCount: Int
     
     private var collectionView: UICollectionView
+    
+    public var delegate: PasswordInputViewDelegate?
     
     override var backgroundColor: UIColor? {
         willSet{
@@ -49,8 +56,6 @@ class PasswordInputView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         becomeFirstResponder()
     }
-    
-    
 }
 
 extension PasswordInputView: UIKeyInput {
@@ -69,15 +74,21 @@ extension PasswordInputView: UIKeyInput {
     }
     
     func insertText(_ text: String) {
-        if chars.count < maxCount {
-            chars.append(text)
-            reloadView(type: .add)
+        if let canAdd = delegate?.inputView(self, canAdd: text) {
+            if canAdd ,chars.count < maxCount {
+                chars.append(text)
+                reloadView(type: .add)
+            }
+        }else {
+            if chars.count < maxCount {
+                chars.append(text)
+                reloadView(type: .add)
+            }
         }
     }
     
     func deleteBackward() {
         _ = chars.popLast()
-        print(chars)
         reloadView(type: .delete)
     }
     
@@ -101,8 +112,6 @@ extension PasswordInputView: UIKeyInput {
             UIView.setAnimationsEnabled(true)
         }
     }
-    
-    
 }
 
 extension PasswordInputView :UICollectionViewDelegate,UICollectionViewDataSource {
