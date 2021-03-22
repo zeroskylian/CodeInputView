@@ -5,12 +5,8 @@
 //  Created by 廉鑫博 on 2019/6/20.
 //  Copyright © 2019 廉鑫博. All rights reserved.
 //
-
-import Foundation
 import UIKit
 
-
-/// iOS 13 用diffable 写
 class PasswordInputView: UIView {
     
     private let inputv:UITextField = UITextField()
@@ -21,7 +17,7 @@ class PasswordInputView: UIView {
     
     private var collectionView:UICollectionView
     
-    override var backgroundColor: UIColor?{
+    override var backgroundColor: UIColor? {
         willSet{
             collectionView.backgroundColor = backgroundColor
         }
@@ -43,6 +39,7 @@ class PasswordInputView: UIView {
         collectionView.delegate = self
         collectionView.dataSource = self
         addSubview(collectionView)
+        
         inputv.keyboardType = .decimalPad
         inputv.addTarget(self, action: #selector(textfieldTextDidChange(textfield:)), for: .editingChanged)
         addSubview(inputv)
@@ -87,11 +84,10 @@ class PasswordInputView: UIView {
 }
 
 
-extension PasswordInputView :UICollectionViewDelegate,UICollectionViewDataSource
-{
+extension PasswordInputView :UICollectionViewDelegate,UICollectionViewDataSource {
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -130,11 +126,8 @@ class PasswordInputItem: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupBase()
     }
-    
-    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -154,8 +147,7 @@ class PasswordInputItem: UICollectionViewCell {
         lineLayer.isHidden = true
     }
     
-    func clearText()
-    {
+    func clearText() {
         textLabel.text = ""
         lineLayer.isHidden = true
     }
