@@ -29,7 +29,6 @@ class PasswordInputView: UIView {
     }
     
     required init(origin:CGPoint,itemSize: CGSize,itemCount:Int, insets:UIEdgeInsets = UIEdgeInsets.zero, spacing:CGFloat) {
-        
         maxCount = itemCount
         let frame = CGRect(x: origin.x, y: origin.y, width: itemSize.width * CGFloat(itemCount) + insets.left + insets.right + spacing * CGFloat(itemCount - 1), height: itemSize.height + insets.top + insets.bottom)
         let layout = UICollectionViewFlowLayout()
